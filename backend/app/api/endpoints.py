@@ -16,7 +16,6 @@ GEO_BASE_URL = "https://api.geoapify.com/v2"
 GEO_PLACES_URL = "https://api.geoapify.com/v2/places"
 GEO_GEOCODE_URL = "https://api.geoapify.com/v1/geocode/search"
 
-# ─── CACHE HELPERS ────────────────────────────────────────────────
 
 async def get_cache(db: AsyncSession, key: str):
     result = await db.execute(
@@ -48,7 +47,6 @@ async def set_cache(db: AsyncSession, key: str, data: dict):
         ))
     await db.commit()
 
-# ─── PLACES SEARCH ────────────────────────────────────────────────
 
 @router.get("/places/search")
 async def search_places(
@@ -64,7 +62,6 @@ async def search_places(
     if cached:
         return {"source": "cache", "results": cached}
 
-    # Спочатку геокодуємо query щоб отримати категорії
     categories = _query_to_categories(query)
 
     async with httpx.AsyncClient() as client:
@@ -93,7 +90,6 @@ async def search_places(
 
 
 def _query_to_categories(query: str) -> str:
-    """Мапимо текстовий запит на категорії Geoapify"""
     q = query.lower()
     mapping = {
         "restaurant": "catering.restaurant",
@@ -127,7 +123,6 @@ def _query_to_categories(query: str) -> str:
 
 
 def _format_place(feature: dict) -> dict:
-    """Форматуємо відповідь Geoapify у зручний формат"""
     props = feature.get("properties", {})
     geo = feature.get("geometry", {})
     coords = geo.get("coordinates", [None, None])
@@ -145,11 +140,10 @@ def _format_place(feature: dict) -> dict:
         "website": props.get("website"),
         "phone": props.get("phone"),
         "opening_hours": props.get("opening_hours"),
-        "rating": None,  # Geoapify не має рейтингів
+        "rating": None, 
         "photo_url": None,
     }
 
-# ─── PLACE DETAILS ────────────────────────────────────────────────
 
 @router.get("/places/{place_id:path}")
 async def get_place_details(
@@ -183,7 +177,6 @@ async def get_place_details(
     await set_cache(db, cache_key, result)
     return {"source": "api", **result}
 
-# ─── GEOCODE (пошук координат за назвою міста) ───────────────────
 
 @router.get("/geocode")
 async def geocode(
@@ -226,7 +219,6 @@ async def geocode(
     await set_cache(db, cache_key, result)
     return {"source": "api", **result}
 
-# ─── WISHLIST ─────────────────────────────────────────────────────
 
 @router.get("/wishlist")
 async def get_wishlist(db: AsyncSession = Depends(get_db)):
@@ -300,7 +292,6 @@ async def check_wishlist(fsq_id: str, db: AsyncSession = Depends(get_db)):
     exists = result.scalar_one_or_none() is not None
     return {"fsq_id": fsq_id, "in_wishlist": exists}
 
-# ─── HEALTH ───────────────────────────────────────────────────────
 
 @router.get("/health")
 async def health():
