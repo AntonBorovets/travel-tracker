@@ -1,0 +1,57 @@
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+
+  border-radius: 12px;
+  border: 2px solid transparent;
+
+  text-decoration: none;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+
+  opacity: 0.5;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease,
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+
+    border-color: rgba(0, 0, 0, 0.45);
+    opacity: 1;
+
+    .nav-btn__icon {
+      filter: brightness(1.2);
+    }
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.18);
+
+    border: 2px solid rgba(0, 0, 0, 0.45);
+    opacity: 1;
+
+    .nav-btn__icon {
+      filter: brightness(1.2);
+    }
+  }
+
+  &__icon {
+    width: 18px;
+    height: 18px;
+    display: block;
+    transition: filter 0.2s ease;
+  }
+
+  &__label {
+    line-height: 1;
+  }
+}

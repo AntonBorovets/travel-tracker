@@ -1,0 +1,122 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 1.2rem;
+  font-weight: 600;
+
+  img {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+.spacer {
+  flex: 1;
+}
+
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background 0.2s ease;
+  cursor: pointer;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.15);
+
+    .heart-icon {
+      filter: brightness(0.6);
+    }
+  }
+
+  &.active {
+    background: rgba(255, 255, 255, 0.15);
+  }
+}
+
+.nav-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+  transition: filter 0.2s ease;
+}
+
+.heart-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.wishlist-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  background: #ff4081;
+  color: white;
+  font-size: 10px;
+  font-weight: 700;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.lang-switcher {
+  margin-left: 16px;
+
+  padding: 6px 12px;
+  border-radius: 12px;
+
+  transition:
+    background 0.2s ease,
+    opacity 0.2s ease;
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.08);
+  }
+
+  mat-select {
+    width: 70px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    color: #000;
+  }
+
+  ::ng-deep .mat-mdc-select-value {
+    color: #000;
+  }
+
+  ::ng-deep .mat-mdc-select-arrow {
+    display: none;
+  }
+}

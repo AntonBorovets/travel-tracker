@@ -1,0 +1,81 @@
+<div class="detail-page">
+  <button mat-button (click)="goBack()" class="back-btn">
+    <mat-icon>arrow_back</mat-icon>
+    {{ " Назад до пошуку" | translate }}
+  </button>
+
+  @if (loading) {
+    <div class="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!loading && place) {
+    <div class="detail-card">
+      <div class="detail-header">
+        <div>
+          <h1>{{ place.name }}</h1>
+          @if (place.category) {
+            <mat-chip-set>
+              <mat-chip>{{ place.category }}</mat-chip>
+            </mat-chip-set>
+          }
+        </div>
+        <button
+          mat-raised-button
+          [color]="wishlistService.isInWishlist(placeId) ? 'warn' : 'accent'"
+          (click)="toggleWishlist()"
+        >
+          <mat-icon>{{
+            wishlistService.isInWishlist(placeId)
+              ? "favorite"
+              : "favorite_border"
+          }}</mat-icon>
+          {{
+            wishlistService.isInWishlist(placeId)
+              ? ("Видалити з вішлиста" | translate)
+              : ("Додати до вішлиста" | translate)
+          }}
+        </button>
+      </div>
+
+      <mat-divider></mat-divider>
+
+      <div class="detail-info">
+        @if (place.address) {
+          <div class="info-row">
+            <mat-icon>location_on</mat-icon>
+            <span>{{ place.address }}</span>
+          </div>
+        }
+        @if (place.opening_hours) {
+          <div class="info-row">
+            <mat-icon>schedule</mat-icon>
+            <span>{{ place.opening_hours }}</span>
+          </div>
+        }
+        @if (place.phone) {
+          <div class="info-row">
+            <mat-icon>phone</mat-icon>
+            <a [href]="'tel:' + place.phone">{{ place.phone }}</a>
+          </div>
+        }
+        @if (place.website) {
+          <div class="info-row">
+            <mat-icon>language</mat-icon>
+            <a [href]="place.website" target="_blank">{{ place.website }}</a>
+          </div>
+        }
+        @if (place.city || place.country) {
+          <div class="info-row">
+            <mat-icon>public</mat-icon>
+            <span
+              >{{ place.city
+              }}{{ place.country ? ", " + place.country : "" }}</span
+            >
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>

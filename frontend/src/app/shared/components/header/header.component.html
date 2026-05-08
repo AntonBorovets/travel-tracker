@@ -1,0 +1,28 @@
+<mat-toolbar class="header">
+  <a routerLink="/search" class="logo">
+    <img src="earth.svg" alt="Travel Tracker Logo" />
+    <span>Travel Tracker</span>
+  </a>
+
+  <span class="spacer"></span>
+
+  <app-button link="/search" icon="search.svg" label="Пошук" />
+
+  <div class="wishlist-wrapper">
+    <app-button link="/wishlist" icon="favorite.svg" label="Вішлист" />
+    @if (wishlistService.wishlistIds().size > 0) {
+      <span class="badge">{{ wishlistService.wishlistIds().size }}</span>
+    }
+  </div>
+
+  <div class="lang-switcher">
+    <mat-select
+      [(ngModel)]="currentLang"
+      (ngModelChange)="onLangChange($event)"
+    >
+      @for (lang of langs; track lang) {
+        <mat-option [value]="lang">{{ lang.toUpperCase() }}</mat-option>
+      }
+    </mat-select>
+  </div>
+</mat-toolbar>

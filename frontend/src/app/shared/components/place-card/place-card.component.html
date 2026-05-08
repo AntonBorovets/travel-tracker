@@ -1,0 +1,79 @@
+<mat-card class="place-card" (click)="detailClick.emit(place())">
+  <mat-card-header>
+    <mat-card-title>{{ place().name }}</mat-card-title>
+    <mat-card-subtitle>
+      <mat-icon
+        style="
+          font-size: 14px;
+          width: 14px;
+          height: 14px;
+          vertical-align: middle;
+        "
+      >
+        location_on
+      </mat-icon>
+      {{ place().city }}{{ place().country ? ", " + place().country : "" }}
+    </mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (place().address) {
+      <p class="address">
+        <mat-icon>home</mat-icon>
+        {{ place().address }}
+      </p>
+    }
+
+    @if (place().category) {
+      <mat-chip-set>
+        <mat-chip>{{ place().category }}</mat-chip>
+      </mat-chip-set>
+    }
+
+    @if (place().opening_hours) {
+      <p class="hours">
+        <mat-icon>schedule</mat-icon>
+        {{ place().opening_hours }}
+      </p>
+    }
+
+    @if (place().distance) {
+      <p class="distance">
+        <mat-icon>near_me</mat-icon>
+        {{ place().distance }} {{ "м від центру пошуку" | translate }}
+      </p>
+    }
+  </mat-card-content>
+
+  <mat-card-actions>
+    <button
+      mat-button
+      color="primary"
+      (click)="detailClick.emit(place()); $event.stopPropagation()"
+    >
+      <mat-icon>info</mat-icon>
+      {{ "Деталі" | translate }}
+    </button>
+
+    <button
+      mat-button
+      [color]="inWishlist() ? 'warn' : 'accent'"
+      (click)="wishlistToggle.emit(place()); $event.stopPropagation()"
+    >
+      <mat-icon>{{ inWishlist() ? "favorite" : "favorite_border" }}</mat-icon>
+      {{ inWishlist() ? ("Видалити" | translate) : ("Зберегти" | translate) }}
+    </button>
+
+    @if (place().website) {
+      <a
+        mat-button
+        [href]="place().website"
+        target="_blank"
+        (click)="$event.stopPropagation()"
+      >
+        <mat-icon>open_in_new</mat-icon>
+        {{ "Сайт" | translate }}
+      </a>
+    }
+  </mat-card-actions>
+</mat-card>

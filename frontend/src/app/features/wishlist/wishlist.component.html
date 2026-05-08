@@ -1,0 +1,43 @@
+<div class="wishlist-page">
+  <div class="page-header">
+    <h1>
+      <img src="heart.svg" alt="Wishlist Icon" class="header-icon" />
+      {{ "Мій Вішлист" | translate }}
+    </h1>
+    <p>{{ "Місця які ти хочеш відвідати" | translate }}</p>
+  </div>
+
+  @if (loading) {
+    <div class="loading">
+      <mat-spinner diameter="48"></mat-spinner>
+    </div>
+  }
+
+  @if (!loading && items.length === 0) {
+    <div class="empty-state">
+      <mat-icon>favorite_border</mat-icon>
+      <h2>{{ "Wishlist порожній" | translate }}</h2>
+      <p>{{ "Знайди цікаві місця і додай їх сюди!" | translate }}</p>
+      <button mat-raised-button color="primary" (click)="goToSearch()">
+        {{ "Назад до пошуку" | translate }}
+      </button>
+    </div>
+  }
+
+  @if (!loading && items.length > 0) {
+    <div class="results-header">
+      <h2>{{ "Збережено: " + items.length + " місць" | translate }}</h2>
+    </div>
+    <div class="results-grid">
+      @for (item of items; track item.fsq_id) {
+        <app-place-card
+          [place]="toPlace(item)"
+          [inWishlist]="true"
+          (wishlistToggle)="removeItem(item)"
+          (detailClick)="openDetail($event)"
+        >
+        </app-place-card>
+      }
+    </div>
+  }
+</div>

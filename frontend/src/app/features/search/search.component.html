@@ -1,0 +1,109 @@
+<div class="search-page">
+  <div class="search-header">
+    <h1>{{ "Знайди місця для подорожі" | translate }}</h1>
+    <p>
+      {{
+        "Шукай музеї, ресторани, парки та інші цікаві місця по всьому світу"
+          | translate
+      }}
+    </p>
+  </div>
+
+  <div class="search-form">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>{{ "Що шукаємо?" | translate }}</mat-label>
+      <input
+        matInput
+        [(ngModel)]="query"
+        placeholder="museum, restaurant, park..."
+        (keyup.enter)="search()"
+      />
+      <img
+        matSuffix
+        src="search.svg"
+        alt="search"
+        style="width: 20px; height: 20px; margin-right: 12px"
+      />
+    </mat-form-field>
+
+    <div class="location-row">
+      <mat-form-field appearance="outline" class="city-field">
+        <mat-label>{{ "Місто" | translate }}</mat-label>
+        <input
+          matInput
+          [(ngModel)]="city"
+          placeholder="London, Paris, Kyiv..."
+          (keyup.enter)="search()"
+        />
+        <img
+          matSuffix
+          src="city.svg"
+          alt="city"
+          style="width: 20px; height: 20px; margin-right: 12px"
+        />
+      </mat-form-field>
+
+      <button
+        class="geo-btn"
+        (click)="useMyLocation()"
+        [disabled]="locationLoading"
+      >
+        <mat-icon>my_location</mat-icon>
+        {{
+          locationLoading
+            ? ("Визначаємо..." | translate)
+            : ("Моя локація" | translate)
+        }}
+      </button>
+
+      <mat-form-field appearance="outline" class="radius-field">
+        <mat-label>{{ "Радіус" | translate }}</mat-label>
+        <mat-select [(ngModel)]="radius">
+          @for (option of radiusOptions; track option.value) {
+            <mat-option [value]="option.value">{{ option.label }}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <button class="search-btn" (click)="search()" [disabled]="loading">
+      @if (loading) {
+        <mat-spinner diameter="20"></mat-spinner>
+      } @else {
+        <img src="search.svg" alt="search" style="width: 20px; height: 20px" />
+      }
+      {{ loading ? ("Шукаємо..." | translate) : ("Пошук" | translate) }}
+    </button>
+  </div>
+
+  @if (searched && results.length === 0 && !loading) {
+    <div class="empty-state">
+      <mat-icon>search_off</mat-icon>
+      <p>
+        {{
+          "Нічого не знайдено. Спробуй інший запит або збільш радіус пошуку."
+            | translate
+        }}
+      </p>
+    </div>
+  }
+
+  @if (results.length > 0) {
+    <div class="results-header">
+      <h2>
+        {{ 'Знайдено: {{count}} місць' | translate: { count: results.length } }}
+      </h2>
+    </div>
+    <div class="results-grid">
+      @for (place of results; track place.place_id) {
+        <app-place-card
+          [place]="place"
+          [inWishlist]="wishlistService.isInWishlist(place.place_id)"
+          (wishlistToggle)="toggleWishlist($event)"
+          (detailClick)="openDetail($event)"
+        >
+        </app-place-card>
+      }
+    </div>
+  }
+</div>
